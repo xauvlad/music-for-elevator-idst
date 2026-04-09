@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { bonusLink, channelUrl, codeWord, floors, type Floor } from './data/floors';
 
 type Screen = 'gate' | 'home' | 'floor' | 'code';
@@ -11,6 +11,16 @@ function App() {
   const [word, setWord] = useState('');
   const [wordAccepted, setWordAccepted] = useState(false);
   const [wordError, setWordError] = useState('');
+  const [activeButton, setActiveButton] = useState<string | null>(null);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    audioRef.current = new Audio(
+      'https://actions.google.com/sounds/v1/impacts/mechanical_switch.ogg',
+    );
+    audioRef.current.preload = 'auto';
+  }, []);
 
   const title = useMemo(() => {
     if (screen === 'floor' && selectedFloor) return `ЭТАЖ ${selectedFloor.id}`;
@@ -19,54 +29,98 @@ function App() {
     return 'ПРОВЕРКА ДОСТУПА';
   }, [screen, selectedFloor]);
 
-  const withDoorTransition = (action: () => void) => {
+  const playButtonFeedback = () => {
+    try {
+      navigator.vibrate?.(35);
+    } catch {
+      // ignore
+    }
+
+    try {
+      if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        void audioRef.current.play();
+      }
+    } catch {
+      // ignore
+    }
+  };
+
+  const withDoorTransition = (action: () => void, delay = 650) => {
     setDoorsClosed(true);
     window.setTimeout(() => {
       action();
       setDoorsClosed(false);
-    }, 500);
+    }, delay);
   };
 
   const handleFakeSubscriptionCheck = () => {
-    setSubscribed(true);
-    withDoorTransition(() => setScreen('home'));
+    playButtonFeedback();
+    setActiveButton('check');
+    window.setTimeout(() => {
+      setActiveButton(null);
+      setSubscribed(true);
+      withDoorTransition(() => setScreen('home'));
+    }, 220);
   };
 
   const openFloor = (floor: Floor) => {
-    withDoorTransition(() => {
-      setSelectedFloor(floor);
-      setScreen('floor');
-    });
+    playButtonFeedback();
+    setActiveButton(`floor-${floor.id}`);
+    window.setTimeout(() => {
+      setActiveButton(null);
+      withDoorTransition(() => {
+        setSelectedFloor(floor);
+        setScreen('floor');
+      }, 700);
+    }, 250);
   };
 
   const goHome = () => {
-    withDoorTransition(() => {
-      setSelectedFloor(null);
-      setScreen('home');
-      setWord('');
-      setWordAccepted(false);
-      setWordError('');
-    });
+    playButtonFeedback();
+    setActiveButton('back');
+    window.setTimeout(() => {
+      setActiveButton(null);
+      withDoorTransition(() => {
+        setSelectedFloor(null);
+        setScreen('home');
+        setWord('');
+        setWordAccepted(false);
+        setWordError('');
+      });
+    }, 180);
   };
 
   const openCodeScreen = () => {
-    withDoorTransition(() => {
-      setWord('');
-      setWordAccepted(false);
-      setWordError('');
-      setScreen('code');
-    });
+    playButtonFeedback();
+    setActiveButton('code');
+    window.setTimeout(() => {
+      setActiveButton(null);
+      withDoorTransition(() => {
+        setWord('');
+        setWordAccepted(false);
+        setWordError('');
+        setScreen('code');
+      }, 700);
+    }, 250);
   };
 
   const checkWord = () => {
-    if (word.trim().toLowerCase() === codeWord.toLowerCase()) {
-      setWordAccepted(true);
-      setWordError('');
-      return;
-    }
+    playButtonFeedback();
+    setActiveButton('check-word');
 
-    setWordAccepted(false);
-    setWordError('Лифт не распознал команду. Попробуйте ещё раз.');
+    window.setTimeout(() => {
+      setActiveButton(null);
+
+      if (word.trim().toLowerCase() === codeWord.toLowerCase()) {
+        setWordAccepted(true);
+        setWordError('');
+        return;
+      }
+
+      setWordAccepted(false);
+      setWordError('Лифт не распознал команду. Попробуйте ещё раз.');
+    }, 180);
   };
 
   return (
@@ -74,7 +128,7 @@ function App() {
       <div className="elevator-frame">
         <header className="display-panel">
           <div className="brand">idst — Музыка для лифта</div>
-          <div className="display">{title}</div>
+          <div className={`display ${screen === 'home' ? 'display-blink' : ''}`}>{title}</div>
         </header>
 
         <main className="elevator-stage">
@@ -95,7 +149,10 @@ function App() {
                     Подписаться на канал
                   </a>
 
-                  <button className="wide-button" onClick={handleFakeSubscriptionCheck}>
+                  <button
+                    className={`wide-button ${activeButton === 'check' ? 'is-pressed' : ''}`}
+                    onClick={handleFakeSubscriptionCheck}
+                  >
                     Проверить подписку
                   </button>
                 </div>
@@ -109,22 +166,37 @@ function App() {
             {screen === 'home' && (
               <div className="screen-block home-screen">
                 <div className="elevator-panel">
-                  <div className="panel-display">ВЫБЕРИТЕ ЭТАЖ</div>
+                  <div className="panel-display panel-display-blink">ВЫБЕРИТЕ ЭТАЖ</div>
 
                   <div className="panel-buttons">
-                    <button className="elevator-btn" onClick={() => openFloor(floors[0])}>
+                    <button
+                      className={`elevator-btn ${activeButton === 'floor-1' ? 'is-pressed' : ''}`}
+                      onClick={() => openFloor(floors[0])}
+                    >
                       1
                     </button>
-                    <button className="elevator-btn" onClick={() => openFloor(floors[1])}>
+                    <button
+                      className={`elevator-btn ${activeButton === 'floor-2' ? 'is-pressed' : ''}`}
+                      onClick={() => openFloor(floors[1])}
+                    >
                       2
                     </button>
-                    <button className="elevator-btn" onClick={() => openFloor(floors[2])}>
+                    <button
+                      className={`elevator-btn ${activeButton === 'floor-3' ? 'is-pressed' : ''}`}
+                      onClick={() => openFloor(floors[2])}
+                    >
                       3
                     </button>
-                    <button className="elevator-btn" onClick={() => openFloor(floors[3])}>
+                    <button
+                      className={`elevator-btn ${activeButton === 'floor-4' ? 'is-pressed' : ''}`}
+                      onClick={() => openFloor(floors[3])}
+                    >
                       4
                     </button>
-                    <button className="elevator-btn" onClick={() => openFloor(floors[4])}>
+                    <button
+                      className={`elevator-btn ${activeButton === 'floor-5' ? 'is-pressed' : ''}`}
+                      onClick={() => openFloor(floors[4])}
+                    >
                       5
                     </button>
 
@@ -135,12 +207,16 @@ function App() {
                       rel="noreferrer"
                       aria-label="idst на Яндекс Музыке"
                       title="idst на Яндекс Музыке"
+                      onClick={playButtonFeedback}
                     >
                       idst
                     </a>
                   </div>
 
-                  <button className="code-elevator-btn" onClick={openCodeScreen}>
+                  <button
+                    className={`code-elevator-btn ${activeButton === 'code' ? 'is-pressed' : ''}`}
+                    onClick={openCodeScreen}
+                  >
                     КОДОВОЕ СЛОВО
                   </button>
                 </div>
@@ -166,7 +242,10 @@ function App() {
                         Слушать на Яндекс Музыке
                       </a>
 
-                      <button className="wide-button secondary" onClick={goHome}>
+                      <button
+                        className={`wide-button secondary ${activeButton === 'back' ? 'is-pressed' : ''}`}
+                        onClick={goHome}
+                      >
                         Назад
                       </button>
                     </div>
@@ -193,11 +272,17 @@ function App() {
                 </label>
 
                 <div className="stack gap-md">
-                  <button className="wide-button" onClick={checkWord}>
+                  <button
+                    className={`wide-button ${activeButton === 'check-word' ? 'is-pressed' : ''}`}
+                    onClick={checkWord}
+                  >
                     Проверить
                   </button>
 
-                  <button className="wide-button secondary" onClick={goHome}>
+                  <button
+                    className={`wide-button secondary ${activeButton === 'back' ? 'is-pressed' : ''}`}
+                    onClick={goHome}
+                  >
                     Назад
                   </button>
                 </div>
