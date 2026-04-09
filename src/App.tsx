@@ -77,4 +77,125 @@ function App() {
           <div className="display">{title}</div>
         </header>
 
+        <main className="elevator-stage">
+          <div className={`doors ${doorsClosed ? 'closed' : 'open'}`} aria-hidden="true">
+            <div className="door left" />
+            <div className="door right" />
+          </div>
+
+          <section className="screen-content">
+            {screen === 'gate' && (
+              <div className="screen-block center-block">
+                <p className="lead">
+                  Чтобы подняться выше, подпишитесь на канал группы idst.
+                </p>
+                <div className="stack gap-md">
+                  <a className="wide-button secondary" href={channelUrl} target="_blank" rel="noreferrer">
+                    Подписаться на канал
+                  </a>
+                  <button className="wide-button" onClick={handleFakeSubscriptionCheck}>
+                    Проверить подписку
+                  </button>
+                </div>
+                <p className="hint">
+                  Сейчас это демо-версия: кнопка проверки ведёт дальше без реальной проверки.
+                </p>
+              </div>
+            )}
+
+            {screen === 'home' && (
+              <div className="screen-block home-screen">
+                <div className="panel-grid">
+                  {floors.map((floor) => (
+                    <button
+                      key={floor.id}
+                      className="floor-button"
+                      onClick={() => openFloor(floor)}
+                    >
+                      <span className="floor-number">{floor.id}</span>
+                      <span className="floor-title">{floor.title}</span>
+                    </button>
+                  ))}
+                </div>
+
+                <button className="code-button" onClick={openCodeScreen}>
+                  КОДОВОЕ СЛОВО
+                </button>
+
+                <p className="hint home-hint">
+                  Пассажиры, не осуществившие выбор, будут автоматически доставлены на последний этаж.
+                </p>
+              </div>
+            )}
+
+            {screen === 'floor' && selectedFloor && (
+              <div className="screen-block floor-screen">
+                <div className="floor-card">
+                  <img src={selectedFloor.image} alt={selectedFloor.title} className="floor-image" />
+                  <div className="floor-copy">
+                    <div className="floor-badge">Этаж {selectedFloor.id}</div>
+                    <h1>{selectedFloor.title}</h1>
+                    <p>{selectedFloor.description}</p>
+                    <div className="floor-actions">
+                      <a className="wide-button" href={selectedFloor.musicUrl} target="_blank" rel="noreferrer">
+                        Слушать на Яндекс Музыке
+                      </a>
+                      <button className="wide-button secondary" onClick={goHome}>
+                        Назад
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {screen === 'code' && (
+              <div className="screen-block center-block code-screen">
+                <p className="lead">
+                  Введите кодовое слово, чтобы открыть бонус-трек.
+                </p>
+
+                <label className="code-input-wrap">
+                  <span>Кодовое слово</span>
+                  <input
+                    value={word}
+                    onChange={(e) => setWord(e.target.value)}
+                    placeholder="Введите слово"
+                    className="code-input"
+                  />
+                </label>
+
+                <div className="stack gap-md">
+                  <button className="wide-button" onClick={checkWord}>
+                    Проверить
+                  </button>
+                  <button className="wide-button secondary" onClick={goHome}>
+                    Назад
+                  </button>
+                </div>
+
+                {wordAccepted && (
+                  <div className="result-box success">
+                    <p>Код принят. Допуск открыт.</p>
+                    <a className="wide-button" href={bonusLink} target="_blank" rel="noreferrer">
+                      Получить бонус-трек
+                    </a>
+                  </div>
+                )}
+
+                {!wordAccepted && wordError && <div className="result-box error">{wordError}</div>}
+              </div>
+            )}
+          </section>
+        </main>
+
+        <footer className="footer-bar">
+          <span>demo mode</span>
+          <span>{subscribed ? 'доступ открыт' : 'ожидание проверки'}</span>
+        </footer>
+      </div>
+    </div>
+  );
+}
+
 export default App;
