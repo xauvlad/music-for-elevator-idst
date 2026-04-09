@@ -84,7 +84,6 @@ function App() {
           </div>
 
           <section className="screen-content">
-
             {screen === 'gate' && (
               <div className="screen-block center-block">
                 <p className="lead">
@@ -109,19 +108,36 @@ function App() {
 
             {screen === 'home' && (
               <div className="screen-block home-screen">
-
                 <div className="elevator-panel">
                   <div className="panel-display">ВЫБЕРИТЕ ЭТАЖ</div>
 
                   <div className="panel-buttons">
-                    <button className="elevator-btn" onClick={() => openFloor(floors[0])}>1</button>
-                    <button className="elevator-btn" onClick={() => openFloor(floors[1])}>2</button>
-                    <button className="elevator-btn" onClick={() => openFloor(floors[2])}>3</button>
-                    <button className="elevator-btn" onClick={() => openFloor(floors[3])}>4</button>
+                    <button className="elevator-btn" onClick={() => openFloor(floors[0])}>
+                      1
+                    </button>
+                    <button className="elevator-btn" onClick={() => openFloor(floors[1])}>
+                      2
+                    </button>
+                    <button className="elevator-btn" onClick={() => openFloor(floors[2])}>
+                      3
+                    </button>
+                    <button className="elevator-btn" onClick={() => openFloor(floors[3])}>
+                      4
+                    </button>
+                    <button className="elevator-btn" onClick={() => openFloor(floors[4])}>
+                      5
+                    </button>
 
-                    <div className="center-btn-wrap">
-                      <button className="elevator-btn" onClick={() => openFloor(floors[4])}>5</button>
-                    </div>
+                    <a
+                      className="elevator-btn music-btn"
+                      href="https://music.yandex.ru/artist/6380387"
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="idst на Яндекс Музыке"
+                      title="idst на Яндекс Музыке"
+                    >
+                      idst
+                    </a>
                   </div>
 
                   <button className="code-elevator-btn" onClick={openCodeScreen}>
@@ -132,7 +148,6 @@ function App() {
                 <p className="hint home-hint">
                   Пассажиры, не осуществившие выбор, будут автоматически доставлены на последний этаж.
                 </p>
-
               </div>
             )}
 
@@ -162,7 +177,6 @@ function App() {
 
             {screen === 'code' && (
               <div className="screen-block center-block code-screen">
-
                 <p className="lead">
                   Введите кодовое слово, чтобы открыть бонус-трек.
                 </p>
@@ -203,10 +217,8 @@ function App() {
                     {wordError}
                   </div>
                 )}
-
               </div>
             )}
-
           </section>
         </main>
 
@@ -214,7 +226,6 @@ function App() {
           <span>demo mode</span>
           <span>{subscribed ? 'доступ открыт' : 'ожидание проверки'}</span>
         </footer>
-
       </div>
     </div>
   );
