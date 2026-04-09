@@ -103,35 +103,42 @@ function App() {
               </div>
             )}
 
-            {screen === 'home' && (
-              <div className="screen-block home-screen">
-                <div className="elevator-panel">
-                  <div className="panel-display">ТЕСТ НОВОЙ ПАНЕЛИ 777</div>
+           {screen === 'home' && (
+  <div className="screen-block home-screen">
+    <div className="elevator-panel">
+      <div className="panel-display">ВЫБЕРИТЕ ЭТАЖ</div>
 
-                  <div className="panel-buttons">
-                    {floors.map((floor) => (
-                      <button
-                        key={floor.id}
-                        className="elevator-btn"
-                        onClick={() => openFloor(floor)}
-                        aria-label={`Этаж ${floor.id}: ${floor.title}`}
-                        title={floor.title}
-                      >
-                        F{floor.id}
-                      </button>
-                    ))}
-                  </div>
+      <div className="panel-buttons">
+        <button className="elevator-btn" onClick={() => openFloor(floors[0])}>
+          1
+        </button>
+        <button className="elevator-btn" onClick={() => openFloor(floors[1])}>
+          2
+        </button>
+        <button className="elevator-btn" onClick={() => openFloor(floors[2])}>
+          3
+        </button>
+        <button className="elevator-btn" onClick={() => openFloor(floors[3])}>
+          4
+        </button>
 
-                  <button className="code-elevator-btn" onClick={openCodeScreen}>
-                    КОДОВОЕ СЛОВО
-                  </button>
-                </div>
+        <div className="center-btn-wrap">
+          <button className="elevator-btn" onClick={() => openFloor(floors[4])}>
+            5
+          </button>
+        </div>
+      </div>
 
-                <p className="hint home-hint">
-                  Пассажиры, не осуществившие выбор, будут автоматически доставлены на последний этаж.
-                </p>
-              </div>
-            )}
+      <button className="code-elevator-btn" onClick={openCodeScreen}>
+        КОДОВОЕ СЛОВО
+      </button>
+    </div>
+
+    <p className="hint home-hint">
+      Пассажиры, не осуществившие выбор, будут автоматически доставлены на последний этаж.
+    </p>
+  </div>
+)}
 
             {screen === 'floor' && selectedFloor && (
               <div className="screen-block floor-screen">
