@@ -105,22 +105,27 @@ function App() {
 
             {screen === 'home' && (
               <div className="screen-block home-screen">
-                <div className="panel-grid">
-                  {floors.map((floor) => (
-                    <button
-                      key={floor.id}
-                      className="floor-button"
-                      onClick={() => openFloor(floor)}
-                    >
-                      <span className="floor-number">{floor.id}</span>
-                      <span className="floor-title">{floor.title}</span>
-                    </button>
-                  ))}
-                </div>
+                <div className="elevator-panel">
+                  <div className="panel-display">ВЫБЕРИТЕ ЭТАЖ</div>
 
-                <button className="code-button" onClick={openCodeScreen}>
-                  КОДОВОЕ СЛОВО
-                </button>
+                  <div className="panel-buttons">
+                    {floors.map((floor) => (
+                      <button
+                        key={floor.id}
+                        className="elevator-btn"
+                        onClick={() => openFloor(floor)}
+                        aria-label={`Этаж ${floor.id}: ${floor.title}`}
+                        title={floor.title}
+                      >
+                        {floor.id}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button className="code-elevator-btn" onClick={openCodeScreen}>
+                    КОДОВОЕ СЛОВО
+                  </button>
+                </div>
 
                 <p className="hint home-hint">
                   Пассажиры, не осуществившие выбор, будут автоматически доставлены на последний этаж.
