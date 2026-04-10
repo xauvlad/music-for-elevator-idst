@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { bonusLink, channelUrl, codeWord, floors, type Floor } from './data/floors';
-import doorLeft from '/door-left.png';
-import doorRight from '/door-right.png';
 
 type Screen = 'gate' | 'home' | 'floor' | 'code';
 type GateState = 'checking' | 'not_subscribed' | 'error';
@@ -135,6 +133,16 @@ function App() {
   };
 
   const verifySubscription = async () => {
+    if (import.meta.env.DEV) {
+      setSubscribed(true);
+      setGateState('checking');
+
+      if (screen !== 'home') {
+        withDoorTransition(() => setScreen('home'));
+      }
+      return;
+    }
+
     try {
       setGateState('checking');
 
@@ -305,7 +313,6 @@ function App() {
       <div className="elevator-frame">
         <header className="display-panel">
           <div className="brand">idst — Музыка для лифта</div>
-           <img src="/door-left.png" alt="test left" style={{ width: '60px', height: '60px' }} />
           
           <div className={`display ${screen === 'home' ? 'display-blink' : ''}`}>
             {title}
@@ -326,10 +333,10 @@ function App() {
         <main className="elevator-stage">
           <div className={`doors ${doorsClosed ? 'closed' : 'open'}`} aria-hidden="true">
             <div className="door left">
-             <img src={doorLeft} alt="" />
+             <img src="/door-left.png" alt="" />
             </div>
             <div className="door right">
-              <img src={doorRight} alt="" />
+              <img src="/door-right.png" alt="" />
             </div>
           </div>
 
@@ -393,13 +400,13 @@ function App() {
             {screen === 'home' && (
               <div className="screen-block home-screen">
                 <div className="elevator-panel">
-                  <div className="panel-display panel-display-blink">ВЫБЕРИТЕ ЭТАЖ</div>
+                  {/* <div className="panel-display panel-display-blink">ВЫБЕРИТЕ ЭТАЖ</div> */}
 
                   <div className="panel-buttons">
                     {floors.map((floor) => (
                       <button
                         key={floor.id}
-                        className={`elevator-btn ${activeButton === `floor-${floor.id}` ? 'is-pressed' : ''}`}
+                        className={`elevator-btn btn-floor-${floor.id} ${activeButton === `floor-${floor.id}` ? 'is-pressed' : ''}`}
                         onClick={() => openFloor(floor)}
                       >
                         {floor.id}
@@ -407,7 +414,7 @@ function App() {
                     ))}
 
                     <a
-                      className="elevator-btn music-btn"
+                      className="elevator-btn elevator-btn-music btn-floor-6"
                       href="https://music.yandex.ru/artist/6380387"
                       target="_blank"
                       rel="noreferrer"
