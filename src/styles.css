@@ -187,33 +187,16 @@ body {
   gap: 16px;
 }
 
-/* 👇 ВАЖНО: аккуратно обновлено под вертикальные изображения */
-.floor-card {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  align-items: center;
-}
-
-/* 👇 ВАЖНО: основной фикс */
+/* 🔥 ЕДИНСТВЕННОЕ ИЗМЕНЕНИЕ — ПОД ВЕРТИКАЛЬНЫЕ КАРТИНКИ */
 .floor-image {
   width: 100%;
   height: auto;
-  max-height: 70vh;
+  max-height: 75vh;
   object-fit: contain;
   object-position: center;
-  display: block;
   border-radius: 22px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: #1a1d22;
-}
-
-/* 👇 аккуратно выровнен текст */
-.floor-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  width: 100%;
 }
 
 .floor-badge {
