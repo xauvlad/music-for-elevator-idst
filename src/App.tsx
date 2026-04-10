@@ -89,15 +89,20 @@ function App() {
   };
 
   const withDoorTransition = (action: () => void, delay = 650) => {
-    setDoorsClosed(true);
-    playDoorCloseSound();
+  const travelTime = 1200; // ⏳ время "поездки лифта"
 
-    window.setTimeout(() => {
-      action();
-      playDoorOpenSound();
-      setDoorsClosed(false);
-    }, delay);
-  };
+  setDoorsClosed(true);
+  playDoorCloseSound();
+
+  // 🚪 ждём пока двери закроются + лифт "едет"
+  window.setTimeout(() => {
+    action();
+
+    // 🔔 звук открытия + открытие дверей
+    playDoorOpenSound();
+    setDoorsClosed(false);
+  }, delay + travelTime);
+};
 
   const verifySubscription = async () => {
     try {
