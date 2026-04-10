@@ -32,22 +32,14 @@ function App() {
   const playButtonFeedback = () => {
     try {
       navigator.vibrate?.(35);
-    } catch {
-      // ignore
-    }
-
-    const isIndicatorActive = (id: number) => {
-  return selectedFloor?.id === id || activeButton === `floor-${id}`;
-};
+    } catch {}
 
     try {
       if (audioRef.current) {
         audioRef.current.currentTime = 0;
         void audioRef.current.play();
       }
-    } catch {
-      // ignore
-    }
+    } catch {}
   };
 
   const withDoorTransition = (action: () => void, delay = 650) => {
@@ -127,24 +119,33 @@ function App() {
     }, 180);
   };
 
+  // ✅ индикатор использует уже существующее состояние
+  const isIndicatorActive = (id: number) => {
+    return selectedFloor?.id === id || activeButton === `floor-${id}`;
+  };
+
   return (
     <div className="app-shell">
       <div className="elevator-frame">
-       <header className="display-panel">
-  <div className="brand">idst — Музыка для лифта</div>
-  <div className={`display ${screen === 'home' ? 'display-blink' : ''}`}>{title}</div>
+        <header className="display-panel">
+          <div className="brand">idst — Музыка для лифта</div>
 
-  <div className="floor-indicator" aria-label="Индикатор этажей">
-    {[1, 2, 3, 4, 5].map((id) => (
-      <span
-        key={id}
-        className={`floor-indicator-item ${isIndicatorActive(id) ? 'active' : ''}`}
-      >
-        {id}
-      </span>
-    ))}
-  </div>
-</header>
+          <div className={`display ${screen === 'home' ? 'display-blink' : ''}`}>
+            {title}
+          </div>
+
+          {/* 🔥 НОВЫЙ ИНДИКАТОР */}
+          <div className="floor-indicator">
+            {[1, 2, 3, 4, 5].map((id) => (
+              <span
+                key={id}
+                className={`floor-indicator-item ${isIndicatorActive(id) ? 'active' : ''}`}
+              >
+                {id}
+              </span>
+            ))}
+          </div>
+        </header>
 
         <main className="elevator-stage">
           <div className={`doors ${doorsClosed ? 'closed' : 'open'}`} aria-hidden="true">
@@ -184,44 +185,21 @@ function App() {
                   <div className="panel-display panel-display-blink">ВЫБЕРИТЕ ЭТАЖ</div>
 
                   <div className="panel-buttons">
-                    <button
-                      className={`elevator-btn ${activeButton === 'floor-1' ? 'is-pressed' : ''}`}
-                      onClick={() => openFloor(floors[0])}
-                    >
-                      1
-                    </button>
-                    <button
-                      className={`elevator-btn ${activeButton === 'floor-2' ? 'is-pressed' : ''}`}
-                      onClick={() => openFloor(floors[1])}
-                    >
-                      2
-                    </button>
-                    <button
-                      className={`elevator-btn ${activeButton === 'floor-3' ? 'is-pressed' : ''}`}
-                      onClick={() => openFloor(floors[2])}
-                    >
-                      3
-                    </button>
-                    <button
-                      className={`elevator-btn ${activeButton === 'floor-4' ? 'is-pressed' : ''}`}
-                      onClick={() => openFloor(floors[3])}
-                    >
-                      4
-                    </button>
-                    <button
-                      className={`elevator-btn ${activeButton === 'floor-5' ? 'is-pressed' : ''}`}
-                      onClick={() => openFloor(floors[4])}
-                    >
-                      5
-                    </button>
+                    {floors.map((floor) => (
+                      <button
+                        key={floor.id}
+                        className={`elevator-btn ${activeButton === `floor-${floor.id}` ? 'is-pressed' : ''}`}
+                        onClick={() => openFloor(floor)}
+                      >
+                        {floor.id}
+                      </button>
+                    ))}
 
                     <a
                       className="elevator-btn music-btn"
                       href="https://music.yandex.ru/artist/6380387"
                       target="_blank"
                       rel="noreferrer"
-                      aria-label="idst на Яндекс Музыке"
-                      title="idst на Яндекс Музыке"
                       onClick={playButtonFeedback}
                     >
                       idst
