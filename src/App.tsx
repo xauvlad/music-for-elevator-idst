@@ -303,7 +303,8 @@ function App() {
       <div className="elevator-frame">
         <header className="display-panel">
           <div className="brand">idst — Музыка для лифта</div>
-
+           <img src="/door-left.png" alt="test left" style={{ width: '60px', height: '60px' }} />
+          
           <div className={`display ${screen === 'home' ? 'display-blink' : ''}`}>
             {title}
           </div>
