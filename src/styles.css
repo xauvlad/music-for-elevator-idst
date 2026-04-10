@@ -475,3 +475,57 @@ button {
 .floor-card:hover .floor-image {
   transform: scale(1.015);
 }
+
+/* === ИНДИКАТОР ЭТАЖЕЙ === */
+
+.floor-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.floor-indicator-item {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(180deg, #262b33 0%, #181b21 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.04),
+    0 4px 12px rgba(0, 0, 0, 0.25);
+
+  transition: all 0.2s ease;
+}
+
+.floor-indicator-item.active {
+  background: linear-gradient(180deg, #ffcc88 0%, #c48a3a 100%);
+  color: #1a1208;
+  border-color: rgba(255, 190, 100, 0.45);
+  box-shadow:
+    0 0 18px rgba(255, 190, 100, 0.35),
+    inset 0 1px 4px rgba(255, 255, 255, 0.18);
+}
+
+@media (max-width: 420px) {
+  .floor-indicator {
+    gap: 6px;
+  }
+
+  .floor-indicator-item {
+    min-width: 28px;
+    height: 28px;
+    font-size: 12px;
+    padding: 0 8px;
+  }
+}
