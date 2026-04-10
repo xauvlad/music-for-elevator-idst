@@ -322,8 +322,12 @@ function App() {
 
         <main className="elevator-stage">
           <div className={`doors ${doorsClosed ? 'closed' : 'open'}`} aria-hidden="true">
-            <div className="door left" />
-            <div className="door right" />
+            <div className="door left">
+              <img src="/door-left.png" alt="" />
+            </div>
+            <div className="door right">
+              <img src="/door-right.png" alt="" />
+            </div>
           </div>
 
           <section className="screen-content">
