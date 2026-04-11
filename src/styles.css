@@ -1040,8 +1040,11 @@ button {
   animation: dispatcherTextFade 0.18s ease-out;
 }
 
-.dispatcher-text-typing::after {
-  content: '';
+.dispatcher-text-typing {
+  min-height: 120px;
+}
+
+.dispatcher-caret {
   display: inline-block;
   width: 0.45em;
   height: 1em;
