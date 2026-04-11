@@ -404,9 +404,11 @@ const openDispatcherDialog = () => {
 };
 
 const nextDispatcherLine = () => {
-  if (!selectedFloor || selectedFloor.id !== 2) return;
+  if (!selectedFloor) return;
 
-  const dialog = dispatcherDialogs[2];
+  const dialog = dispatcherDialogs[selectedFloor.id as keyof typeof dispatcherDialogs];
+  if (!dialog) return;
+
   const nextIndex = dialogIndex + 1;
 
   if (nextIndex < dialog.lines.length) {
@@ -414,6 +416,11 @@ const nextDispatcherLine = () => {
     playDispatcherLine(dialog.lines[nextIndex].audio);
     return;
   }
+
+  stopDispatcherAudio();
+  setIsDialogOpen(false);
+  setDialogIndex(0);
+};
 
   stopDispatcherAudio();
   setIsDialogOpen(false);
@@ -482,10 +489,10 @@ const closeDispatcherDialog = () => {
           </div>
 
           {lightBeam && <div className={`light-beam ${lightBeamClass}`} />}
-          {isDialogOpen && selectedFloor?.id === 2 && (
+          {isDialogOpen && selectedFloor && dispatcherDialogs[selectedFloor.id as keyof typeof dispatcherDialogs] && (
   <div className="dispatcher-dialog">
     <img
-      src={dispatcherDialogs[2].portrait}
+      src={dispatcherDialogs[selectedFloor.id as keyof typeof dispatcherDialogs].portrait}
       alt="Диспетчер"
       className="dispatcher-portrait"
     />
@@ -493,12 +500,18 @@ const closeDispatcherDialog = () => {
     <div className="dispatcher-panel">
       <div className="dispatcher-name">Диспетчер</div>
 
-      <div className="dispatcher-text">
-        {dispatcherDialogs[2].lines[dialogIndex].text}
+      <div
+        key={`${selectedFloor.id}-${dialogIndex}`}
+        className="dispatcher-text dispatcher-text-typing"
+      >
+        {dispatcherDialogs[selectedFloor.id as keyof typeof dispatcherDialogs].lines[dialogIndex].text}
       </div>
 
       <button className="dispatcher-next" onClick={nextDispatcherLine}>
-        {dialogIndex === dispatcherDialogs[2].lines.length - 1 ? 'Конец' : 'Далее...'}
+        {dialogIndex ===
+        dispatcherDialogs[selectedFloor.id as keyof typeof dispatcherDialogs].lines.length - 1
+          ? 'Конец'
+          : 'Далее...'}
       </button>
     </div>
   </div>
@@ -612,13 +625,9 @@ const closeDispatcherDialog = () => {
 />
 
                   <div className="floor-copy">
-                    {selectedFloor.id === 2 ? (
-  <button className="floor-badge dispatcher-badge" onClick={openDispatcherDialog}>
-    Диспетчер
-  </button>
-) : (
-  <div className="floor-badge">Этаж {selectedFloor.id}</div>
-)}
+                   <button className="floor-badge dispatcher-badge" onClick={openDispatcherDialog}>
+  Вызвать диспетчера
+</button>
                     <h1>{selectedFloor.title}</h1>
                     <p>{selectedFloor.description}</p>
 
