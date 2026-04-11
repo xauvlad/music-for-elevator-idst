@@ -1,7 +1,7 @@
 export const dispatcherDialogs = {
   2: {
     // этаж Фэншуй
-    portrait: '/dispatcher.png',
+    portrait: '/dispatcher.jpg',
     lines: [
       {
         text: `Этаж «Фэншуй».
