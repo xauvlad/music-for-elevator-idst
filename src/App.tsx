@@ -656,7 +656,7 @@ const closeDispatcherDialog = () => {
   />
 
   <span className="code-hint code-hint-blink">
-    Найди верное слово вам помогут видеошоты альбома на Яндекс Музыке.
+    Найти верное слово вам помогут видеошоты альбома на Яндекс Музыке.
   </span>
 </label>
 
