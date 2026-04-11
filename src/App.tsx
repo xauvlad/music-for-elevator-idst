@@ -514,7 +514,11 @@ function App() {
             {screen === 'floor' && selectedFloor && (
               <div className="screen-block floor-screen">
                 <div className="floor-card">
-                  <img src={selectedFloor.image} alt={selectedFloor.title} className="floor-image" />
+                 <img
+  src={selectedFloor.image}
+  alt={selectedFloor.title}
+  className={`floor-image floor-style-${selectedFloor.id}`}
+/>
 
                   <div className="floor-copy">
                     <div className="floor-badge">Этаж {selectedFloor.id}</div>
