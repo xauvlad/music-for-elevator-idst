@@ -545,3 +545,93 @@ button {
     padding: 0 8px;
   }
 }
+.light-beam {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  animation: beamRise 0.85s ease-out forwards;
+}
+
+.light-beam::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -18%;
+  transform: translateX(-50%);
+  width: 160%;
+  height: 140%;
+  border-radius: 50% 50% 0 0;
+  filter: blur(14px);
+  opacity: 0.95;
+}
+
+/* 1 этаж — закатный оранжевый */
+.light-beam.beam-floor-1::before {
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(255, 153, 51, 0.78) 0%,
+    rgba(255, 170, 90, 0.38) 28%,
+    rgba(255, 130, 40, 0.16) 52%,
+    rgba(255, 120, 40, 0) 72%
+  );
+}
+
+/* 2 этаж — белый */
+.light-beam.beam-floor-2::before {
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(255, 255, 255, 0.82) 0%,
+    rgba(255, 255, 255, 0.42) 28%,
+    rgba(255, 255, 255, 0.15) 52%,
+    rgba(255, 255, 255, 0) 72%
+  );
+}
+
+/* 3 этаж — красный */
+.light-beam.beam-floor-3::before {
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(255, 82, 82, 0.8) 0%,
+    rgba(255, 90, 90, 0.4) 28%,
+    rgba(255, 80, 80, 0.16) 52%,
+    rgba(255, 80, 80, 0) 72%
+  );
+}
+
+/* 4 этаж — синий */
+.light-beam.beam-floor-4::before {
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(88, 160, 255, 0.82) 0%,
+    rgba(88, 160, 255, 0.4) 28%,
+    rgba(88, 160, 255, 0.16) 52%,
+    rgba(88, 160, 255, 0) 72%
+  );
+}
+
+/* 5 этаж — фиолетовый */
+.light-beam.beam-floor-5::before {
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(180, 110, 255, 0.82) 0%,
+    rgba(180, 110, 255, 0.4) 28%,
+    rgba(180, 110, 255, 0.16) 52%,
+    rgba(180, 110, 255, 0) 72%
+  );
+}
+
+@keyframes beamRise {
+  0% {
+    opacity: 0;
+    transform: translateY(18%) scaleY(0.72);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8%) scaleY(1.08);
+  }
+}
