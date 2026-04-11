@@ -866,3 +866,27 @@ button {
     filter: contrast(1) hue-rotate(0deg);
   }
 }
+.code-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(255, 220, 170, 0.72);
+  text-align: center;
+}
+
+.code-hint-blink {
+  animation: codeHintBlink 2.2s ease-in-out infinite;
+}
+
+@keyframes codeHintBlink {
+  0%,
+  100% {
+    opacity: 0.55;
+    text-shadow: 0 0 0 rgba(255, 210, 140, 0);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(255, 210, 140, 0.22);
+  }
+}
