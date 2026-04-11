@@ -359,6 +359,13 @@ button {
   border-radius: 22px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: #1a1d22;
+
+  /* ✨ АНИМАЦИЯ */
+  opacity: 0;
+  transform: scale(1.06);
+  filter: blur(6px);
+
+  animation: imageReveal 0.7s ease forwards;
 }
 
 .floor-copy {
@@ -575,5 +582,176 @@ button {
     height: 28px;
     font-size: 12px;
     padding: 0 8px;
+  }
+}
+.light-beam {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  animation: beamRise 0.85s ease-out forwards;
+}
+
+.light-beam::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -18%;
+  transform: translateX(-50%);
+  width: 160%;
+  height: 140%;
+  border-radius: 50% 50% 0 0;
+  filter: blur(14px);
+  opacity: 0.95;
+}
+
+/* 1 этаж — закатный оранжевый */
+.light-beam.beam-floor-1::before {
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(255, 153, 51, 0.78) 0%,
+    rgba(255, 170, 90, 0.38) 28%,
+    rgba(255, 130, 40, 0.16) 52%,
+    rgba(255, 120, 40, 0) 72%
+  );
+}
+
+/* 2 этаж — белый */
+.light-beam.beam-floor-2::before {
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(255, 255, 255, 0.82) 0%,
+    rgba(255, 255, 255, 0.42) 28%,
+    rgba(255, 255, 255, 0.15) 52%,
+    rgba(255, 255, 255, 0) 72%
+  );
+}
+
+/* 3 этаж — красный */
+.light-beam.beam-floor-3::before {
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(255, 82, 82, 0.8) 0%,
+    rgba(255, 90, 90, 0.4) 28%,
+    rgba(255, 80, 80, 0.16) 52%,
+    rgba(255, 80, 80, 0) 72%
+  );
+}
+
+/* 4 этаж — синий */
+.light-beam.beam-floor-4::before {
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(88, 160, 255, 0.82) 0%,
+    rgba(88, 160, 255, 0.4) 28%,
+    rgba(88, 160, 255, 0.16) 52%,
+    rgba(88, 160, 255, 0) 72%
+  );
+}
+
+/* 5 этаж — фиолетовый */
+.light-beam.beam-floor-5::before {
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(180, 110, 255, 0.82) 0%,
+    rgba(180, 110, 255, 0.4) 28%,
+    rgba(180, 110, 255, 0.16) 52%,
+    rgba(180, 110, 255, 0) 72%
+  );
+}
+
+@keyframes beamRise {
+  0% {
+    opacity: 0;
+    transform: translateY(18%) scaleY(0.72);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8%) scaleY(1.08);
+  }
+}
+
+/* === СИСТЕМНАЯ КНОПКА ЗВУКА === */
+
+.mute-button {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 1200;
+
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(18, 20, 26, 0.62);
+  color: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
+
+  opacity: 0.82;
+}
+
+.mute-button:hover {
+  opacity: 1;
+  background: rgba(24, 27, 35, 0.78);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.32),
+    0 0 10px rgba(255, 190, 100, 0.12);
+}
+
+.mute-button:active,
+.mute-button.is-pressed {
+  transform: scale(0.92);
+}
+
+.mute-button svg,
+.mute-button img,
+.mute-button span {
+  width: 18px;
+  height: 18px;
+  display: block;
+  pointer-events: none;
+}
+
+@media (max-width: 420px) {
+  .mute-button {
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+  }
+}
+@keyframes imageReveal {
+  0% {
+    opacity: 0;
+    transform: scale(1.06);
+    filter: blur(6px);
+  }
+
+  60% {
+    opacity: 1;
+    filter: blur(2px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
   }
 }

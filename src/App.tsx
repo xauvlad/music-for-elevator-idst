@@ -33,10 +33,14 @@ function App() {
   const [activeButton, setActiveButton] = useState<string | null>(null);
   const [gateState, setGateState] = useState<GateState>('checking');
   const [currentIndicatorFloor, setCurrentIndicatorFloor] = useState<number | null>(null);
+  const [lightBeam, setLightBeam] = useState(false);
+  const [lightBeamFloor, setLightBeamFloor] = useState<number | null>(null);
+  const [isMuted, setIsMuted] = useState(false);
 
   const buttonAudioRef = useRef<HTMLAudioElement | null>(null);
   const elevatorAudioRef = useRef<HTMLAudioElement | null>(null);
   const dingAudioRef = useRef<HTMLAudioElement | null>(null);
+  const bgMusicRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     buttonAudioRef.current = new Audio('/button.mp3');
@@ -47,7 +51,24 @@ function App() {
 
     dingAudioRef.current = new Audio('/sound.mp3');
     dingAudioRef.current.preload = 'auto';
+
+    bgMusicRef.current = new Audio('/music.mp3');
+    bgMusicRef.current.preload = 'auto';
+    bgMusicRef.current.loop = true;
+    bgMusicRef.current.volume = 0.35;
   }, []);
+
+  useEffect(() => {
+    if (bgMusicRef.current) {
+      bgMusicRef.current.volume = 0.35;
+
+      if (isMuted) {
+        bgMusicRef.current.pause();
+      } else {
+        void bgMusicRef.current.play().catch(() => {});
+      }
+    }
+  }, [isMuted]);
 
   useEffect(() => {
     window.Telegram?.WebApp?.ready?.();
@@ -68,10 +89,27 @@ function App() {
     return 'ПРОВЕРКА ДОСТУПА';
   }, [screen, selectedFloor, gateState]);
 
+  const toggleMute = () => {
+    setIsMuted((prev) => !prev);
+  };
+
+  const ensureBackgroundMusic = () => {
+    try {
+      if (!isMuted && bgMusicRef.current && bgMusicRef.current.paused) {
+        bgMusicRef.current.volume = 0.35;
+        void bgMusicRef.current.play().catch(() => {});
+      }
+    } catch {}
+  };
+
   const playButtonFeedback = () => {
+    ensureBackgroundMusic();
+
     try {
       navigator.vibrate?.(35);
     } catch {}
+
+    if (isMuted) return;
 
     try {
       if (buttonAudioRef.current) {
@@ -82,6 +120,8 @@ function App() {
   };
 
   const playDoorCloseSound = () => {
+    if (isMuted) return;
+
     try {
       if (elevatorAudioRef.current) {
         elevatorAudioRef.current.currentTime = 0;
@@ -91,6 +131,8 @@ function App() {
   };
 
   const playDoorOpenSound = () => {
+    if (isMuted) return;
+
     try {
       if (dingAudioRef.current) {
         dingAudioRef.current.currentTime = 0;
@@ -114,7 +156,11 @@ function App() {
     const direction = fromFloor <= toFloor ? 1 : -1;
     const route: number[] = [];
 
-    for (let floor = fromFloor; direction === 1 ? floor <= toFloor : floor >= toFloor; floor += direction) {
+    for (
+      let floor = fromFloor;
+      direction === 1 ? floor <= toFloor : floor >= toFloor;
+      floor += direction
+    ) {
       route.push(floor);
     }
 
@@ -251,8 +297,16 @@ function App() {
         setSelectedFloor(floor);
         setScreen('floor');
         setCurrentIndicatorFloor(floor.id);
+
+        setLightBeamFloor(floor.id);
+        setLightBeam(true);
+
         playDoorOpenSound();
         setDoorsClosed(false);
+
+        window.setTimeout(() => {
+          setLightBeam(false);
+        }, 850);
       }, DOOR_CLOSE_TIME + ELEVATOR_TRAVEL_TIME);
     }, BUTTON_PRESS_DELAY);
   };
@@ -308,8 +362,25 @@ function App() {
     return currentIndicatorFloor === id;
   };
 
+  const lightBeamClass =
+    lightBeamFloor === 1
+      ? 'beam-floor-1'
+      : lightBeamFloor === 2
+      ? 'beam-floor-2'
+      : lightBeamFloor === 3
+      ? 'beam-floor-3'
+      : lightBeamFloor === 4
+      ? 'beam-floor-4'
+      : lightBeamFloor === 5
+      ? 'beam-floor-5'
+      : '';
+
   return (
     <div className="app-shell">
+      <button className="mute-button" onClick={toggleMute} aria-label={isMuted ? 'Включить звук' : 'Выключить звук'}>
+        {isMuted ? '🔇' : '🔊'}
+      </button>
+
       <div className="elevator-frame">
         <header className="display-panel">
           {/* <div className="brand">idst — Музыка для лифта</div> */}
@@ -335,12 +406,14 @@ function App() {
         <main className="elevator-stage">
           <div className={`doors ${doorsClosed ? 'closed' : 'open'}`} aria-hidden="true">
             <div className="door left">
-             <img src="/door-left.png" alt="" />
+              <img src="/door-left.png" alt="" />
             </div>
             <div className="door right">
               <img src="/door-right.png" alt="" />
             </div>
           </div>
+
+          {lightBeam && <div className={`light-beam ${lightBeamClass}`} />}
 
           <section className="screen-content">
             {screen === 'gate' && (
@@ -443,7 +516,11 @@ function App() {
             {screen === 'floor' && selectedFloor && (
               <div className="screen-block floor-screen">
                 <div className="floor-card">
-                  <img src={selectedFloor.image} alt={selectedFloor.title} className="floor-image" />
+                 <img
+  src={selectedFloor.image}
+  alt={selectedFloor.title}
+  className={`floor-image floor-style-${selectedFloor.id}`}
+/>
 
                   <div className="floor-copy">
                     <div className="floor-badge">Этаж {selectedFloor.id}</div>
