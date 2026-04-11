@@ -34,6 +34,10 @@ function App() {
   const [gateState, setGateState] = useState<GateState>('checking');
   const [currentIndicatorFloor, setCurrentIndicatorFloor] = useState<number | null>(null);
 
+  // ✅ новый state для луча
+  const [lightBeam, setLightBeam] = useState(false);
+  const [lightBeamFloor, setLightBeamFloor] = useState<number | null>(null);
+
   const buttonAudioRef = useRef<HTMLAudioElement | null>(null);
   const elevatorAudioRef = useRef<HTMLAudioElement | null>(null);
   const dingAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -251,8 +255,17 @@ function App() {
         setSelectedFloor(floor);
         setScreen('floor');
         setCurrentIndicatorFloor(floor.id);
+
+        // ✅ включаем луч только при открытии этажа
+        setLightBeamFloor(floor.id);
+        setLightBeam(true);
+
         playDoorOpenSound();
         setDoorsClosed(false);
+
+        window.setTimeout(() => {
+          setLightBeam(false);
+        }, 850);
       }, DOOR_CLOSE_TIME + ELEVATOR_TRAVEL_TIME);
     }, BUTTON_PRESS_DELAY);
   };
@@ -308,6 +321,19 @@ function App() {
     return currentIndicatorFloor === id;
   };
 
+  const lightBeamClass =
+    lightBeamFloor === 1
+      ? 'beam-floor-1'
+      : lightBeamFloor === 2
+      ? 'beam-floor-2'
+      : lightBeamFloor === 3
+      ? 'beam-floor-3'
+      : lightBeamFloor === 4
+      ? 'beam-floor-4'
+      : lightBeamFloor === 5
+      ? 'beam-floor-5'
+      : '';
+
   return (
     <div className="app-shell">
       <div className="elevator-frame">
@@ -333,12 +359,15 @@ function App() {
         <main className="elevator-stage">
           <div className={`doors ${doorsClosed ? 'closed' : 'open'}`} aria-hidden="true">
             <div className="door left">
-             <img src="/door-left.png" alt="" />
+              <img src="/door-left.png" alt="" />
             </div>
             <div className="door right">
               <img src="/door-right.png" alt="" />
             </div>
           </div>
+
+          {/* ✅ луч света только для этажей */}
+          {lightBeam && <div className={`light-beam ${lightBeamClass}`} />}
 
           <section className="screen-content">
             {screen === 'gate' && (
