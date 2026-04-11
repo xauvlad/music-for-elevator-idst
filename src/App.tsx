@@ -39,6 +39,8 @@ function App() {
   const [isMuted, setIsMuted] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogIndex, setDialogIndex] = useState(0);
+  const [typedText, setTypedText] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
 
   const buttonAudioRef = useRef<HTMLAudioElement | null>(null);
   const elevatorAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -59,12 +61,12 @@ function App() {
     bgMusicRef.current = new Audio('/music.mp3');
     bgMusicRef.current.preload = 'auto';
     bgMusicRef.current.loop = true;
-    bgMusicRef.current.volume = 0.25;
+    bgMusicRef.current.volume = 0.20;
   }, []);
 
   useEffect(() => {
   if (bgMusicRef.current) {
-    bgMusicRef.current.volume = 0.35;
+    bgMusicRef.current.volume = 0.20;
 
     if (isMuted) {
       bgMusicRef.current.pause();
@@ -88,6 +90,37 @@ function App() {
       setCurrentIndicatorFloor(selectedFloor.id);
     }
   }, [selectedFloor]);
+
+  useEffect(() => {
+  if (!isDialogOpen || !selectedFloor) {
+    setTypedText('');
+    setIsTyping(false);
+    return;
+  }
+
+  const dialog = dispatcherDialogs[selectedFloor.id as keyof typeof dispatcherDialogs];
+  if (!dialog) return;
+
+  const fullText = dialog.lines[dialogIndex].text;
+  let index = 0;
+
+  setTypedText('');
+  setIsTyping(true);
+
+  const interval = window.setInterval(() => {
+    index += 1;
+    setTypedText(fullText.slice(0, index));
+
+    if (index >= fullText.length) {
+      window.clearInterval(interval);
+      setIsTyping(false);
+    }
+  }, 22);
+
+  return () => {
+    window.clearInterval(interval);
+  };
+}, [isDialogOpen, selectedFloor, dialogIndex]);
 
   const title = useMemo(() => {
     if (screen === 'floor' && selectedFloor) return `ЭТАЖ ${selectedFloor.id}`;
@@ -495,19 +528,21 @@ const closeDispatcherDialog = () => {
     <div className="dispatcher-panel">
       <div className="dispatcher-name">Диспетчер</div>
 
-      <div
-        key={`${selectedFloor.id}-${dialogIndex}`}
-        className="dispatcher-text dispatcher-text-typing"
-      >
-        {dispatcherDialogs[selectedFloor.id as keyof typeof dispatcherDialogs].lines[dialogIndex].text}
-      </div>
+      <div className="dispatcher-text dispatcher-text-typing">
+  {typedText}
+  {isTyping && <span className="dispatcher-caret" />}
+</div>
 
-      <button className="dispatcher-next" onClick={nextDispatcherLine}>
-        {dialogIndex ===
-        dispatcherDialogs[selectedFloor.id as keyof typeof dispatcherDialogs].lines.length - 1
-          ? 'Конец'
-          : 'Далее...'}
-      </button>
+<button
+  className="dispatcher-next"
+  onClick={nextDispatcherLine}
+  disabled={isTyping}
+>
+  {dialogIndex ===
+  dispatcherDialogs[selectedFloor.id as keyof typeof dispatcherDialogs].lines.length - 1
+    ? 'Конец'
+    : 'Далее...'}
+</button>
     </div>
   </div>
 )}
