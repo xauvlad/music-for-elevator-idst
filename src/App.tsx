@@ -551,15 +551,19 @@ function App() {
                 </p>
 
                 <label className="code-input-wrap">
-                  <span>Кодовое слово</span>
+  <span>Кодовое слово</span>
 
-                  <input
-                    value={word}
-                    onChange={(e) => setWord(e.target.value)}
-                    placeholder="Введите слово"
-                    className="code-input"
-                  />
-                </label>
+  <input
+    value={word}
+    onChange={(e) => setWord(e.target.value)}
+    placeholder="Введите слово"
+    className="code-input"
+  />
+
+  <span className="code-hint code-hint-blink">
+    Найди верное слово вам помогут видеошоты альбома на Яндекс Музыке.
+  </span>
+</label>
 
                 <div className="stack gap-md">
                   <button
