@@ -43,6 +43,7 @@ button {
 }
 
 .elevator-frame {
+  position: relative;
   width: min(100%, 460px);
   min-height: min(920px, 100vh - 32px);
   border-radius: 28px;
@@ -142,6 +143,29 @@ button {
   font-weight: bold;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+
+.panel-display-choice {
+  position: absolute;
+  left: 50.2%;
+  top: 9.6%;
+  transform: translateX(-50%);
+  width: 52%;
+  height: 30px;
+  border-radius: 6px;
+  z-index: -2;
+  
+  /* Centering */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  
+  /* Text styling */
+  font-size: 75%;
+  color: #ffcc88; /* Match other panel displays */
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .panel-buttons {
@@ -435,11 +459,10 @@ button {
 }
 
 .doors {
-  position: fixed; 
-  /* position: absolute; */
+  position: absolute;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   z-index: 1000;
   pointer-events: none;
 }
@@ -450,7 +473,7 @@ button {
   bottom: 0;
   width: 50%;
   overflow: hidden;
-  transition: transform 0.45s ease;
+  transition: transform 0.7s ease-out;
 }
 
 .door img {
@@ -459,6 +482,7 @@ button {
   object-fit: cover;
   display: block;
   pointer-events: none;
+  
 }
 
 .door.left {
@@ -470,6 +494,14 @@ button {
   right: 0;
   border-left: 0px solid rgba(255, 255, 255, 0.08);
 }
+
+.door.right img {
+  object-position: left center;
+} 
+
+.door.left img {
+  object-position: right center;
+} 
 
 .doors.open .door.left {
   transform: translateX(-100%);
@@ -490,7 +522,7 @@ button {
   display: flex;
   justify-content: center;
   gap: 8px;
-  margin-top: 12px;
+  /* margin-top: 2px; */
 }
 
 .floor-indicator-item {
