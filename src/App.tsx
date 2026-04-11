@@ -18,7 +18,7 @@ declare global {
   }
 }
 
-const DOOR_CLOSE_TIME = 650;
+const DOOR_CLOSE_TIME = 500;
 const ELEVATOR_TRAVEL_TIME = 1200;
 const BUTTON_PRESS_DELAY = 250;
 
@@ -312,11 +312,13 @@ function App() {
     <div className="app-shell">
       <div className="elevator-frame">
         <header className="display-panel">
-          <div className="brand">idst — Музыка для лифта</div>
+          {/* <div className="brand">idst — Музыка для лифта</div> */}
           
-          <div className={`display ${screen === 'home' ? 'display-blink' : ''}`}>
-            {title}
-          </div>
+          {/* {screen !== 'home' && (
+            <div className={`display`}>
+              {title}
+            </div>
+          )} */}
 
           <div className="floor-indicator">
             {[1, 2, 3, 4, 5].map((id) => (
@@ -400,7 +402,7 @@ function App() {
             {screen === 'home' && (
               <div className="screen-block home-screen">
                 <div className="elevator-panel">
-                  {/* <div className="panel-display panel-display-blink">ВЫБЕРИТЕ ЭТАЖ</div> */}
+                  <div className={`panel-display panel-display-choice ${screen === 'home' ? 'panel-display-blink' : ''}`}>{title}</div>
 
                   <div className="panel-buttons">
                     {floors.map((floor) => (
