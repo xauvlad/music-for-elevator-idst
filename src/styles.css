@@ -48,7 +48,7 @@ button {
   width: min(100%, 480px);
   min-height: min(920px, 100vh - 32px);
   border-radius: 28px;
-  overflow: hidden;
+  overflow: visible;
   /* background: linear-gradient(180deg, #17191f 0%, #111318 100%); */
   background: 
     linear-gradient(0deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2)),
@@ -90,6 +90,9 @@ button {
   /* margin-top: 12px; */
   padding: clamp(8px, 3.8cqi, 16px) clamp(12px, 4.2cqi, 20px);
   transform: translateY(8px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .display {
@@ -395,13 +398,13 @@ button {
 @keyframes dispatcherCallGlow {
   0%,
   100% {
-    filter: drop-shadow(0 0 4px rgba(255, 190, 100, 0.14));
+    filter: drop-shadow(0 0 8px rgba(255, 190, 100, 0.14));
     border-color: rgba(255, 190, 100, 0.28);
   }
   50% {
     filter:
       drop-shadow(0 0 10px rgba(255, 200, 120, 0.28))
-      drop-shadow(0 0 22px rgba(255, 160, 80, 0.12));
+      drop-shadow(0 0 22px rgba(255, 160, 80, 0.88));
     border-color: rgba(255, 205, 140, 0.45);
   }
 }
@@ -1196,8 +1199,9 @@ a.mute-button {
   text-align: center;
 
   /* Same visual language as .elevator-btn-disp (no panel positioning) */
-  background: linear-gradient(180deg, #3a2a1a 0%, #1c140c 100%);
-  color: #ffcc88;
+  background: linear-gradient(180deg, #ffcc88 0%, #c79e68 100%);
+  color: #3a2a1a;
+  font-weight: 700;
   border: 1px solid rgba(255, 190, 100, 0.3);
   border-radius: 6px;
   display: flex;
