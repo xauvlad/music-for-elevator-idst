@@ -90,7 +90,7 @@ button {
   /* margin-top: 12px; */
   padding: clamp(8px, 3.8cqi, 16px) clamp(12px, 4.2cqi, 20px);
   transform: translateY(8px);
-  position: sticky;
+  /* position: sticky; */
   top: 0;
   z-index: 10;
 }
@@ -199,7 +199,7 @@ button {
 }
 
 .elevator-panel {
-  width: min(100%, 340px);
+  width: min(100%, 360px);
   aspect-ratio: 9 / 16;
   background: url('/panel.png') no-repeat center center;
   background-size: 100% 100%;
