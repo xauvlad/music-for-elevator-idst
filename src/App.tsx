@@ -509,13 +509,13 @@ const closeDispatcherDialog = () => {
       <div className="shell-floating-actions" role="toolbar" aria-label="Системные действия">
         {!inTelegramMiniApp && (
           <a
-            className="mute-button"
+            className="tg-button"
             href={channelUrl}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Канал idst в Telegram"
           >
-            <span aria-hidden="true">✈️</span>
+            <span aria-hidden="true"></span>
           </a>
         )}
         <button className="mute-button" type="button" onClick={toggleMute} aria-label={isMuted ? 'Включить звук' : 'Выключить звук'}>
@@ -526,7 +526,7 @@ const closeDispatcherDialog = () => {
       <div className="elevator-frame">
         <header className="elevator-header">
           <div className="top-display-panel">
-            <div className={`display ${screen === 'home' ? 'panel-display-blink' : ''}`}>
+            <div className={`display ${screen === 'home' ? 'panel-display-blink' : ''} panel-display`}>
               {title}
             </div>
           </div><div className="indicator-panel">

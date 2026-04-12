@@ -64,15 +64,6 @@ button {
   grid-template-rows: auto 1fr auto;
 }
 
-.display-panel {
-  justify-self: center;
-  padding: 18px 18px 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-
 .brand {
   font-size: 12px;
   text-transform: uppercase;
@@ -86,31 +77,32 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: min(100%, min(600px, 90cqi));
+  margin-inline: auto;
   box-sizing: border-box;
-
-  background-color: transparent;
+  
   background-image: url('/wall.jpg');
   background-position: center center;
-  background-size: 90% auto;
+  background-size: contain; /* Changed from contain to fill the panel */
   background-repeat: no-repeat;
-  padding: 18px;
-  padding: clamp(10px, 3.8cqi, 18px) clamp(12px, 4.2cqi, 20px);
+  
+  margin-top: 12px;
+  padding: clamp(8px, 3.8cqi, 16px) clamp(12px, 4.2cqi, 20px);
+  transform: translateY(15px);
 }
 
 .display {
-  width: min(100%, 360px);
-  width: min(100%, min(360px, 78cqi));
+  width: min(80%, min(360px, 80cqi));
   border-radius: 16px;
   border-radius: clamp(12px, 3.4cqi, 16px);
   padding: 18px 20px;
   padding: clamp(10px, 3.6cqi, 18px) clamp(12px, 4.2cqi, 20px);
-  min-height: 56px;
-  min-height: clamp(44px, 11.5cqi, 56px);
-  font-size: 0.8rem;
-  font-size: clamp(0.68rem, 2.1cqi + 0.42rem, 0.88rem);
+  min-height: clamp(32px, 11.5cqi, 48px);
+  height: fit-content;
+  font-size: clamp(6px, 5vw, 16px);
   display: flex;
   align-items: center;
+  align-self: center;
   justify-content: center;
   text-align: center;
   background: linear-gradient(180deg, #331b0e 0%, #1c1009 100%);
@@ -122,9 +114,14 @@ button {
   box-shadow: inset 0 0 24px rgba(255, 154, 60, 0.1);
 }
 
+.indicator-panel {
+  margin-top: 0px;
+  padding-top: 0px;
+}
+
 .floor-indicator {
   /* 6 lamps + 5 gaps on one row; size shrinks to fit content box */
-  --gap: clamp(3px, 1.2cqi, 6px);
+  --gap: clamp(12px, 1.2cqi, 6px);
   --indicator-size: min(44px, calc((100% - 5 * var(--gap)) / 6));
 
   display: flex;
@@ -133,30 +130,45 @@ button {
   flex-wrap: nowrap;
   align-items: center;
   gap: var(--gap);
-  margin-top: 12px;
-  margin-top: clamp(8px, 2.5cqi, 12px);
+  margin-top: 0px;
+  margin-top: 0px;
+  /* margin-top: clamp(8px, 2.5cqi, 12px); */
   margin-bottom: 6px;
   margin-inline: auto;
-  width: min(100%, 360px);
-  width: min(100%, min(360px, 78cqi));
-  padding: 10px 12px;
+  height: fit-content;
+  width: min(100%, min(600px, 90cqi));
+  padding: 0px 12px;
   padding: clamp(8px, 2.4cqi, 10px) clamp(10px, 2.8cqi, 12px);
-  border-radius: 18px;
-  border-radius: clamp(14px, 3.8cqi, 18px);
-  background-color: #1c1814;
+  /* border-radius: 18px;
+  border-radius: clamp(14px, 3.8cqi, 18px); */
+  background-color: #ffffff00;
   background-image: url('/plate.jpg');
   background-position: center center;
-  background-size: 100% auto;
+  background-size: contain;
   background-repeat: no-repeat;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow:
+  border: 0px solid rgba(255, 255, 255, 0.08);
+  /* box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 10px 20px rgba(0, 0, 0, 0.18);
+    0 10px 20px rgba(0, 0, 0, 0.18); */
 }
 
 .display-blink,
 .panel-display-blink {
-  animation: softBlink 1.8s ease-in-out infinite;
+  animation: softGlow 2s ease-in-out infinite;
+}
+
+@keyframes softGlow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 8px rgba(255, 190, 100, 0.7));
+    border-color: rgba(255, 190, 100, 1);
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 10px rgba(255, 200, 120, 0.28))
+      drop-shadow(0 0 22px rgba(255, 160, 80, 0.12));
+    border-color: rgba(255, 205, 140, 0.45);
+  }
 }
 
 @keyframes softBlink {
@@ -178,6 +190,7 @@ button {
 .elevator-header {
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.80) 100%);
   /* background: url('/public/wall.jpg') no-repeat center center; */
+
 }
 
 .elevator-panel {
@@ -200,15 +213,17 @@ button {
 
 .panel-display {
   justify-self: center;
+  height: 30px;
   background: linear-gradient(180deg, #3a1f0f 0%, #1c0f07 100%);
   border: 1px solid rgba(255, 180, 90, 0.3);
   color: #ffcc88;
   padding: 12px;
   text-align: center;
-  border-radius: 0px;
+  border-radius: 12px; /* Change this from 0px */
   font-weight: bold;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  font-size: clamp(6px, 3vw, 16px);
 }
 
 .panel-display-choice {
@@ -253,7 +268,7 @@ button {
     linear-gradient(180deg, #f9dc98 0%, #d39d3d 45%, #8f6e31 75%, #60431d 100%);
   border: 2px solid rgba(58, 41, 4, 0.9);
   color: #2a1200;
-  font-size: 18px;
+  font-size: clamp(6px, 5vw, 20px);
   font-weight: 800;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
   box-shadow:
@@ -310,7 +325,7 @@ button {
   bottom: 12.8%;
   transform: translateX(-50%);
   width: 52%;
-  height: 48px;
+  height: 8%;
   border-radius: 8px;
   pointer-events: auto;
 
@@ -320,7 +335,7 @@ button {
   text-align: center;
 
   font-weight: 800;
-  font-size: 90%;
+  font-size: clamp(6px, 3.5vw, 14px);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #2a1200;
@@ -390,7 +405,7 @@ button {
 }
 
 .elevator-btn-disp {
-  font-size: 18px;
+  font-size: clamp(6px, 2vw + 0.2rem, 12px);
   text-transform: lowercase;
   background: linear-gradient(180deg, #3a2a1a 0%, #1c140c 100%);
   color: #ffcc88;
@@ -402,7 +417,7 @@ button {
   top: 9.6%;
   transform: translateX(-50%);
   width: 52%;
-  height: 30px;
+  height: 5.3%;
   border-radius: 6px;
   transition: all 0.15s ease;
   pointer-events: auto;
@@ -415,7 +430,6 @@ button {
   text-align: center;
   
   /* Text styling */
-  font-size: 75%;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -896,6 +910,30 @@ button {
   flex-direction: row-reverse;
   align-items: center;
   gap: 8px;
+}
+
+.tg-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-image: url('/tg.png');
+  background-size: contain; /* or cover/contain */
+  background-position: center;
+  background-repeat: no-repeat;
+  
+  background-color: rgba(18, 20, 26, 0.62); /* Fallback */
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+  transition: all 0.15s ease;
+  opacity: 0.82;
 }
 
 .mute-button {
