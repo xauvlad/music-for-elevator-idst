@@ -64,9 +64,12 @@ button {
 }
 
 .display-panel {
-  background: url('/plate.jpg') center center / cover no-repeat;
+  justify-self: center;
   padding: 18px 18px 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
 .brand {
@@ -78,8 +81,11 @@ button {
 }
 
 .display {
+  margin-top: 8px;
+  justify-self: center;
+  width: min(100%, 360px);
   border-radius: 16px;
-  padding: 16px;
+  padding: 18px 20px;
   min-height: 56px;
   display: flex;
   align-items: center;
@@ -92,6 +98,23 @@ button {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   box-shadow: inset 0 0 24px rgba(255, 154, 60, 0.1);
+}
+
+.floor-indicator {
+  display: flex;
+  justify-content: center;
+  justify-self: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 6px;
+  width: min(100%, 360px);
+  padding: 10px 12px;
+  border-radius: 18px;
+  background: url('/plate.jpg') center center / cover no-repeat;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 10px 20px rgba(0, 0, 0, 0.18);
 }
 
 .display-blink,
@@ -115,6 +138,11 @@ button {
   }
 }
 
+.elevator-header {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.80) 100%);
+  
+}
+
 .elevator-panel {
   width: min(100%, 340px);
   aspect-ratio: 9 / 16;
@@ -134,6 +162,7 @@ button {
 }
 
 .panel-display {
+  justify-self: center;
   background: linear-gradient(180deg, #3a1f0f 0%, #1c0f07 100%);
   border: 1px solid rgba(255, 180, 90, 0.3);
   color: #ffcc88;
@@ -777,10 +806,8 @@ button {
 
 .mute-button {
   position: fixed;
-
-  top: calc(env(safe-area-inset-top, 0px) + 12px);
-  right: calc(env(safe-area-inset-right, 0px) + 12px);
-
+  top: 14px;
+  right: 14px;
   z-index: 1200;
 
   width: 38px;
@@ -794,12 +821,10 @@ button {
   background: rgba(18, 20, 26, 0.62);
   color: rgba(255, 255, 255, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.12);
-
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
-
   transition:
     transform 0.15s ease,
     background 0.15s ease,
