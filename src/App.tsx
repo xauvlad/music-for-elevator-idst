@@ -68,12 +68,12 @@ function App() {
     bgMusicRef.current = new Audio('/music.mp3');
     bgMusicRef.current.preload = 'auto';
     bgMusicRef.current.loop = true;
-    bgMusicRef.current.volume = 0.20;
+    bgMusicRef.current.volume = 0.25;
   }, []);
 
   useEffect(() => {
   if (bgMusicRef.current) {
-    bgMusicRef.current.volume = 0.20;
+    bgMusicRef.current.volume = 0.25;
 
     if (isMuted) {
       bgMusicRef.current.pause();
