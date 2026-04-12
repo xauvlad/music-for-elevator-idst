@@ -275,20 +275,62 @@ button {
   width: 52%;
   height: 48px;
   border-radius: 8px;
-  background: linear-gradient(180deg, #2c313b 0%, #171a22 100%);
-  color: white;
-  font-weight: bold;
-  font-size: 90%; 
-  letter-spacing: 0.05em;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.15s ease;
   pointer-events: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  font-weight: 800;
+  font-size: 90%;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #2a1200;
+  text-shadow: 0 1px 0 rgba(255, 230, 190, 0.35);
+
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, transparent 42%),
+    linear-gradient(180deg, #ffe8a8 0%, #e8b85a 38%, #c4923f 62%, #8a6328 100%);
+  border: 2px solid rgba(58, 41, 4, 0.85);
+  box-shadow:
+    inset 0 5px 10px rgba(255, 255, 255, 0.35),
+    inset 0 -6px 14px rgba(74, 48, 12, 0.35),
+    0 0 0 1px rgba(255, 200, 120, 0.35),
+    0 0 26px rgba(255, 190, 100, 0.32),
+    0 12px 24px rgba(0, 0, 0, 0.38);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.code-elevator-btn:hover {
+  border-color: rgba(42, 28, 0, 0.92);
+  box-shadow:
+    inset 0 5px 10px rgba(255, 255, 255, 0.4),
+    inset 0 -6px 14px rgba(74, 48, 12, 0.32),
+    0 0 0 1px rgba(255, 210, 140, 0.5),
+    0 0 34px rgba(255, 200, 110, 0.42),
+    0 14px 28px rgba(0, 0, 0, 0.4);
 }
 
 .code-elevator-btn:active,
 .code-elevator-btn.is-pressed {
   transform: translateX(-50%) scale(0.97);
   transform-origin: center center;
+  color: #241005;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, transparent 38%),
+    linear-gradient(180deg, #ffd98d 0%, #dca646 35%, #a27438 70%, #5c3e22 100%);
+  box-shadow:
+    inset 0 3px 8px rgba(255, 255, 255, 0.2),
+    inset 0 -5px 12px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(255, 190, 100, 0.28),
+    0 0 18px rgba(255, 180, 90, 0.22),
+    0 8px 18px rgba(0, 0, 0, 0.36);
 }
 .wide-button.is-pressed {
   transform: scale(0.97);
@@ -1056,23 +1098,29 @@ button {
 .dispatcher-badge {
   cursor: pointer;
   appearance: none;
-  font: inherit;
+  font-family: inherit;
   text-align: center;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    background 0.15s ease;
+
+  /* Same visual language as .elevator-btn-disp (no panel positioning) */
+  background: linear-gradient(180deg, #3a2a1a 0%, #1c140c 100%);
+  color: #ffcc88;
+  border: 1px solid rgba(255, 190, 100, 0.3);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+  transition: all 0.15s ease;
 }
 
 .dispatcher-badge:hover {
-  box-shadow:
-    0 10px 22px rgba(0, 0, 0, 0.28),
-    0 0 10px rgba(255, 208, 142, 0.14);
+  border-color: rgba(255, 190, 100, 0.42);
+  box-shadow: 0 0 12px rgba(255, 190, 100, 0.12);
 }
 
 .dispatcher-badge:active {
   transform: scale(0.97);
+  transform-origin: center center;
 }
 
 .dispatcher-dialog {
