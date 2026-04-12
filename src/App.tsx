@@ -687,7 +687,6 @@ const closeDispatcherDialog = () => {
                 </p>
 
                 <label className="code-input-wrap">
-  <span>Кодовое слово</span>
 
   <input
     value={word}
@@ -736,11 +735,7 @@ const closeDispatcherDialog = () => {
             )}
           </section>
         </main>
-
-        <footer className="footer-bar">
-          <span>subscription mode</span>
-          <span>{subscribed ? 'доступ открыт' : 'ожидание проверки'}</span>
-        </footer>
+        
       </div>
     </div>
   );
