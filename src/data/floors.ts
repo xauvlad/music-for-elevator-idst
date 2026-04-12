@@ -46,8 +46,8 @@ export const floors: Floor[] = [
   {
     id: 5,
     title: 'Некромодерн',
-    description: 'мы и так здесь',
-    image: 'https://placehold.co/1080x1920/1b1d22/f0b2b2?text=%D0%AD%D1%82%D0%B0%D0%B6+5',
+    description: '@х!лл3$ р@зд@в!л ч3р3п@ху',
+    image: '/floors/floor-5.jpg',
     musicUrl: 'https://music.yandex.ru/',
   },
 ];
