@@ -32,7 +32,8 @@ function App() {
   const [screen, setScreen] = useState<Screen>(() => (hasTelegramInitData() ? 'gate' : 'home'));
   const [selectedFloor, setSelectedFloor] = useState<Floor | null>(null);
   const [subscribed, setSubscribed] = useState(false);
-  const [doorsClosed, setDoorsClosed] = useState(false);
+  /** Telegram: open on load (gate copy sits under doors). Browser: closed first, then open animation. */
+  const [doorsClosed, setDoorsClosed] = useState(() => (hasTelegramInitData() ? false : true));
   const [word, setWord] = useState('');
   const [wordAccepted, setWordAccepted] = useState(false);
   const [wordError, setWordError] = useState('');
@@ -293,6 +294,17 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (hasTelegramInitData()) return;
+    const id = window.setTimeout(() => {
+      playDoorOpenSound();
+      setDoorsClosed(false);
+    }, DOOR_CLOSE_TIME);
+    return () => window.clearTimeout(id);
+    // playDoorOpenSound is stable enough for mount-only browser intro
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     const recheckOnReturn = () => {
       if (screen === 'gate' && hasTelegramInitData()) {
         void verifySubscription();
@@ -519,11 +531,19 @@ const closeDispatcherDialog = () => {
             </div>
           </div><div className="indicator-panel">
             <div className="floor-indicator">
-              {["K", 1, 2, 3, 4, 5].map((id) => (
+              {(['K', 1, 2, 3, 4, 5] as const).map((id) => (
                 <span
                   key={id}
                   className={`floor-indicator-item ${isIndicatorActive(id) ? 'active' : ''}`}
-                  onClick={() => openFloor(floors.find((f) => f.id === id) as Floor)}
+                  onClick={() => {
+                    if (id === 'K') {
+                      closeDispatcherDialog();
+                      openCodeScreen();
+                      return;
+                    }
+                    const floor = floors.find((f) => f.id === id);
+                    if (floor) openFloor(floor);
+                  }}
                 >
                   {id}
                 </span>
@@ -679,7 +699,7 @@ const closeDispatcherDialog = () => {
 
                   <div className="floor-copy">
                    <button className="floor-badge dispatcher-badge" onClick={openDispatcherDialog}>
-  Вызвать диспетчера
+  Вызов диспетчера
 </button>
                     <h1>{selectedFloor.title}</h1>
                     <p>{selectedFloor.description}</p>

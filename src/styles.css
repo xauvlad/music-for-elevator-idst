@@ -43,6 +43,7 @@ button {
 }
 
 .elevator-frame {
+  container-type: inline-size;
   position: relative;
   width: min(100%, 480px);
   min-height: min(920px, 100vh - 32px);
@@ -80,13 +81,34 @@ button {
   margin-bottom: 10px;
 }
 
+.top-display-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+
+  background-color: transparent;
+  background-image: url('/wall.jpg');
+  background-position: center center;
+  background-size: 90% auto;
+  background-repeat: no-repeat;
+  padding: 18px;
+  padding: clamp(10px, 3.8cqi, 18px) clamp(12px, 4.2cqi, 20px);
+}
+
 .display {
-  margin-top: 8px;
-  justify-self: center;
   width: min(100%, 360px);
+  width: min(100%, min(360px, 78cqi));
   border-radius: 16px;
+  border-radius: clamp(12px, 3.4cqi, 16px);
   padding: 18px 20px;
+  padding: clamp(10px, 3.6cqi, 18px) clamp(12px, 4.2cqi, 20px);
   min-height: 56px;
+  min-height: clamp(44px, 11.5cqi, 56px);
+  font-size: 0.8rem;
+  font-size: clamp(0.68rem, 2.1cqi + 0.42rem, 0.88rem);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,16 +123,31 @@ button {
 }
 
 .floor-indicator {
+  /* 6 lamps + 5 gaps on one row; size shrinks to fit content box */
+  --gap: clamp(3px, 1.2cqi, 6px);
+  --indicator-size: min(44px, calc((100% - 5 * var(--gap)) / 6));
+
   display: flex;
   justify-content: center;
   justify-self: center;
-  flex-wrap: wrap;
-  gap: 10px;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--gap);
+  margin-top: 12px;
+  margin-top: clamp(8px, 2.5cqi, 12px);
   margin-bottom: 6px;
+  margin-inline: auto;
   width: min(100%, 360px);
+  width: min(100%, min(360px, 78cqi));
   padding: 10px 12px;
+  padding: clamp(8px, 2.4cqi, 10px) clamp(10px, 2.8cqi, 12px);
   border-radius: 18px;
-  background: url('/plate.jpg') center center / cover no-repeat;
+  border-radius: clamp(14px, 3.8cqi, 18px);
+  background-color: #1c1814;
+  background-image: url('/plate.jpg');
+  background-position: center center;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
@@ -140,7 +177,7 @@ button {
 
 .elevator-header {
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.80) 100%);
-  
+  /* background: url('/public/wall.jpg') no-repeat center center; */
 }
 
 .elevator-panel {
@@ -338,6 +375,20 @@ button {
   box-shadow: 0 0 18px rgba(255, 190, 100, 0.2);
 }
 
+@keyframes dispatcherCallGlow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 4px rgba(255, 190, 100, 0.14));
+    border-color: rgba(255, 190, 100, 0.28);
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 10px rgba(255, 200, 120, 0.28))
+      drop-shadow(0 0 22px rgba(255, 160, 80, 0.12));
+    border-color: rgba(255, 205, 140, 0.45);
+  }
+}
+
 .elevator-btn-disp {
   font-size: 18px;
   text-transform: lowercase;
@@ -355,6 +406,7 @@ button {
   border-radius: 6px;
   transition: all 0.15s ease;
   pointer-events: auto;
+  animation: dispatcherCallGlow 2.6s ease-in-out infinite;
   
   /* Centering */
   display: flex;
@@ -372,6 +424,8 @@ button {
 .elevator-btn-disp:active {
   transform: translateX(-50%) scale(0.97);
   transform-origin: center center;
+  animation: none;
+  filter: drop-shadow(0 0 8px rgba(255, 190, 100, 0.22));
 }
 
 .elevator-stage {
@@ -681,20 +735,15 @@ button {
 
 /* === ИНДИКАТОР ЭТАЖЕЙ === */
 
-.floor-indicator {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 12px;
-}
-
 .floor-indicator-item {
-  width: 42px;
-  height: 42px;
-  min-width: 28px;
-  min-height: 28px;
+  box-sizing: border-box;
+  width: var(--indicator-size, 42px);
+  height: var(--indicator-size, 42px);
+  min-width: var(--indicator-size, 42px);
+  min-height: var(--indicator-size, 42px);
+  aspect-ratio: 1;
   padding: 0;
-  border-radius: 100%;
+  border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -703,8 +752,9 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.05);
   color: #1a1208;
   font-size: 14px;
+  font-size: max(12px, min(14px, calc(var(--indicator-size, 42px) * 0.34)));
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   box-shadow:
     inset 0 2px 6px rgba(255, 255, 255, 0.06),
     inset 0 -2px 4px rgba(0, 0, 0, 0.4),
@@ -742,16 +792,6 @@ button {
     font-size: 16px;
   }
 
-  .floor-indicator {
-    gap: 6px;
-  }
-
-  .floor-indicator-item {
-    min-width: 28px;
-    height: 28px;
-    font-size: 12px;
-    padding: 0 8px;
-  }
 }
 .light-beam {
   position: absolute;
@@ -1125,6 +1165,7 @@ a.mute-button {
   justify-content: center;
   box-shadow: none;
   transition: all 0.15s ease;
+  animation: dispatcherCallGlow 2.6s ease-in-out infinite;
 }
 
 .dispatcher-badge:hover {
@@ -1135,6 +1176,21 @@ a.mute-button {
 .dispatcher-badge:active {
   transform: scale(0.97);
   transform-origin: center center;
+  animation: none;
+  filter: drop-shadow(0 0 8px rgba(255, 190, 100, 0.22));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elevator-btn-disp,
+  .dispatcher-badge {
+    animation: none;
+  }
+
+  .elevator-btn-disp.is-pressed,
+  .elevator-btn-disp:active,
+  .dispatcher-badge:active {
+    filter: none;
+  }
 }
 
 .dispatcher-dialog {
