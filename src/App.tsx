@@ -65,10 +65,6 @@ function App() {
     bgMusicRef.current.volume = 0.20;
   }, []);
 
-  useEffect(() => {
-  if (bgMusicRef.current) {
-    bgMusicRef.current.volume = 0.20;
-
     if (isMuted) {
       bgMusicRef.current.pause();
     } else {
