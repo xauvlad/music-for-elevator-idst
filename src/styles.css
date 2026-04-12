@@ -44,7 +44,7 @@ button {
 
 .elevator-frame {
   position: relative;
-  width: min(100%, 460px);
+  width: min(100%, 480px);
   min-height: min(920px, 100vh - 32px);
   border-radius: 28px;
   overflow: hidden;
@@ -64,8 +64,8 @@ button {
 }
 
 .display-panel {
+  background: url('/plate.jpg') center center / cover no-repeat;
   padding: 18px 18px 12px;
-  background: linear-gradient(180deg, #20242c 0%, #151821 100%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -249,6 +249,7 @@ button {
   background: linear-gradient(180deg, #2c313b 0%, #171a22 100%);
   color: white;
   font-weight: bold;
+  font-size: 90%; 
   letter-spacing: 0.05em;
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.15s ease;
@@ -612,15 +613,17 @@ button {
 .floor-indicator {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
   margin-top: 12px;
 }
 
 .floor-indicator-item {
   width: 42px;
   height: 42px;
+  min-width: 28px;
+  min-height: 28px;
   padding: 0;
-  border-radius: 50%;
+  border-radius: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -636,6 +639,7 @@ button {
     inset 0 -2px 4px rgba(0, 0, 0, 0.4),
     0 4px 10px rgba(0, 0, 0, 0.35);
   transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
 .floor-indicator-item.active {

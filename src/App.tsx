@@ -93,13 +93,13 @@ function App() {
   }, [selectedFloor]);
 
   useEffect(() => {
-  if (!isDialogOpen || !selectedFloor) {
+  if (!isDialogOpen) {
     setTypedText('');
     setIsTyping(false);
     return;
   }
 
-  const dialog = dispatcherDialogs[selectedFloor.id as keyof typeof dispatcherDialogs];
+  const dialog = dispatcherDialogs[!selectedFloor ? 6 as keyof typeof dispatcherDialogs : selectedFloor.id as keyof typeof dispatcherDialogs];
   if (!dialog) return;
 
   const fullText = dialog.lines[dialogIndex].text;
@@ -429,9 +429,8 @@ const playDispatcherLine = (src: string) => {
 };
 
 const openDispatcherDialog = () => {
-  if (!selectedFloor) return;
 
-  const dialog = dispatcherDialogs[selectedFloor.id as keyof typeof dispatcherDialogs];
+  const dialog = dispatcherDialogs[!selectedFloor ? 6 as keyof typeof dispatcherDialogs : selectedFloor.id as keyof typeof dispatcherDialogs];
   if (!dialog || !dialog.lines.length) return;
 
   setDialogIndex(0);
@@ -441,9 +440,8 @@ const openDispatcherDialog = () => {
 };
 
 const nextDispatcherLine = () => {
-  if (!selectedFloor) return;
 
-  const dialog = dispatcherDialogs[selectedFloor.id as keyof typeof dispatcherDialogs];
+  const dialog = dispatcherDialogs[!selectedFloor ? 6 as keyof typeof dispatcherDialogs : selectedFloor.id as keyof typeof dispatcherDialogs];
   if (!dialog) return;
 
   const nextIndex = dialogIndex + 1;
@@ -490,24 +488,22 @@ const closeDispatcherDialog = () => {
       </button>
 
       <div className="elevator-frame">
-        <header className="display-panel">
-          {/* <div className="brand">idst — Музыка для лифта</div> */}
-          
-          
+        <header className="elevator-header">
+          <div className="top-display-panel">
             <div className={`display ${screen === 'home' ? 'panel-display-blink' : ''}`}>
               {title}
             </div>
-          
-
-          <div className="floor-indicator">
-            {["K", 1, 2, 3, 4, 5].map((id) => (
-              <span
-                key={id}
-                className={`floor-indicator-item ${isIndicatorActive(id) ? 'active' : ''}`}
-              >
-                {id}
-              </span>
-            ))}
+          </div><div className="indicator-panel">
+            <div className="floor-indicator">
+              {["K", 1, 2, 3, 4, 5].map((id) => (
+                <span
+                  key={id}
+                  className={`floor-indicator-item ${isIndicatorActive(id) ? 'active' : ''}`}
+                >
+                  {id}
+                </span>
+              ))}
+            </div>
           </div>
         </header>
 
@@ -522,10 +518,10 @@ const closeDispatcherDialog = () => {
           </div>
 
           {lightBeam && <div className={`light-beam ${lightBeamClass}`} />}
-          {isDialogOpen && selectedFloor && dispatcherDialogs[selectedFloor.id as keyof typeof dispatcherDialogs] && (
+          {isDialogOpen && dispatcherDialogs[!selectedFloor ? 6 as keyof typeof dispatcherDialogs : selectedFloor.id as keyof typeof dispatcherDialogs] && (
   <div className="dispatcher-dialog">
     <img
-      src={dispatcherDialogs[selectedFloor.id as keyof typeof dispatcherDialogs].portrait}
+      src={dispatcherDialogs[!selectedFloor ? 6 as keyof typeof dispatcherDialogs : selectedFloor.id as keyof typeof dispatcherDialogs].portrait}
       alt="Диспетчер"
       className="dispatcher-portrait"
     />
@@ -540,7 +536,7 @@ const closeDispatcherDialog = () => {
 
 <button className="dispatcher-next" onClick={nextDispatcherLine}>
   {dialogIndex ===
-  dispatcherDialogs[selectedFloor.id as keyof typeof dispatcherDialogs].lines.length - 1
+  dispatcherDialogs[!selectedFloor ? 6 as keyof typeof dispatcherDialogs : selectedFloor.id as keyof typeof dispatcherDialogs].lines.length - 1
     ? 'Конец'
     : 'Далее...'}
 </button>
@@ -609,7 +605,7 @@ const closeDispatcherDialog = () => {
               <div className="screen-block home-screen">
                 <div className="elevator-panel">
                   <button className={`elevator-btn-disp`}
-                  onClick={openCodeScreen}>вызов диспетчера</button>
+                  onClick={openDispatcherDialog}>вызов диспетчера</button>
 
                   <div className="panel-buttons">
                     {floors.map((floor) => (
