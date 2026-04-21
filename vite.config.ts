@@ -106,6 +106,6 @@ export default defineConfig({
   preview: {
     host: '0.0.0.0',
     port: 3000,
-    allowedHosts: ['music-for-elevator-xauvlad.amvera.io', '.amvera.io']
+    allowedHosts: ['music-for-elevator-xauvlad.amvera.io', '.amvera.io', 'idst-musicforelevator.ru']
   }
 });
