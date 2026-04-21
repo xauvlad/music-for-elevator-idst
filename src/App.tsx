@@ -291,11 +291,9 @@ function App() {
   useEffect(() => {
     void verifySubscription();
 
-    // Fallback: if Telegram takes >5s to load, proceed without it
+    // Fallback: if Telegram subscription check takes >5s, show error so user can retry
     const telegramTimeoutId = window.setTimeout(() => {
-      if (gateState === 'checking' && !subscribed) {
-        setScreen('home');
-        setSubscribed(false);
+      if (gateState === 'checking') {
         setGateState('error');
       }
     }, 5000);
