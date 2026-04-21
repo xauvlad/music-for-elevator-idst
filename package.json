@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite --host localhost --port 5173 --strictPort",
     "build": "vite build",
-    "preview": "vite preview --host localhost --port 4173 --strictPort"
+    "preview": "vite preview --host localhost --port 4173 --strictPort",
+    "start": "vite preview --host --port 3000"
   },
   "dependencies": {
     "react": "^18.3.1",
